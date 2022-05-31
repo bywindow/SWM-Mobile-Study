@@ -51,6 +51,28 @@
   ```
   이런 형태로, 같은 속성(property)을 가지지만 데이터만 다른 여러 개체들이 생겨날 것이다. 실수로 `position`을 postion으로 잘못 작성했다면 해당 부분을 찾아 일일이 수정하는 과정을 거쳐야 한다. 고로 매우 비효율적인 코드이다. 또한 데이터의 구조에 대한 고민이 없다.
 
-  # OOP
-  ---
+# OOP
+---
+위와 같은 문제들을 해결하기 위해, **객체 지향 프로그래밍(object-oriented programming)**이라는 개념이 등장했고, 그렇게 해서 사용된 것이 `Class`이다.
+## Class
+- 객체(object)를 위한 팩토리 같은 것이다.
+- 같은 속성을 갖고 있지만 데이터가 다를 경우에 일종의 구조(설계도)를 만들어준다.
+- **Kotlin**에서는 다음과 같이 사용된다.
+  ```kotlin
+  class Example {
+      companion object {
+          fun main(args: Array<String>) {
+              // TODO
+          }
+      }
+  }
+  ```
+  >**Kotlin은 Java의 `static` 키워드를 지원하지 않는다.**
+  >그 대신 pakage 수준의 최상위 함수와 객체 선언을 통해 `static` 메서드 역할을 대신한다.
+  >위의 코드에서는 `companion object` 키워드를 통해 class 안의 private 멤버에 접근할 수 있는 static 메서드를 선언한 것이다.
   
+- 이렇게 `class`를 사용하면 이전과 같이 코드를 무수히 많이 복사할 필요가 없다!
+
+그럼, kotlin에서 class가 어떻게 사용되는지 알아보자.
+
+### Kotlin에서의 Class
