@@ -76,3 +76,34 @@
 그럼, kotlin에서 class가 어떻게 사용되는지 알아보자.
 
 ### Kotlin에서의 Class
+#### 생성자
+- Kotlin은 JavaScript와 같이 constructor 라는 키워드를 통해 생성자를 선언한다.
+  ```kotlin
+   class Player {
+       constructor (name: String, age: Int, position: String) {
+           this.name = name
+           this.age = age
+           this.position = position
+       }
+       var name: String = ""
+       var age: Int = 0
+       var position: String = ""
+   }
+   ```
+- `constructor` 키워드를 클래스 이름 옆에 선언할 수 있다.
+  ```Kotlin
+  class Player constructor (name: String, age: Int, position: String) {
+      var name: String = name
+      var age: Int = age
+      var position: String = position
+  }
+  ```
+- `constructor` 키워드를 생략할 수 있다.
+  ```kotlin
+  class Player (name: String, age: Int) {
+      var name: String = name
+      var age: Int = age
+      var position: String = position
+  }
+  ```
+- `constructor` 키워드를 통한 생성자 오버로드로 특정 property에 대해 default 값을 선언할 수 있다.
