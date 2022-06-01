@@ -227,6 +227,10 @@ class ChildTestError {
 
 ### 상속
 - 자식 클래스는 부모 클래스의 properties를 상속 받을 수 있고, 추가적으로 다른 properties를 가질 수 있다.
+- 상속 유형에 따라 `Single-Level`과 `Multi-Level`, `Multiple`이 있다.
+  - Single-Level : 하나의 상속 단계만 있는 경우
+  - Multi-Level : 여러 상속 단계가 있는 경우
+  - Multiple : 하나의 클래스가 여러 클래스를 상속하는 경우로, Kotlin에서는 **Diamond Problem** 때문에 지원하지 않는다. 대신 `Interface` 키워드를 사용하면 된다.
 - 키워드로는 `open`, `super`, `override`, `private`이 있다.
 #### open
 - 기본적으로 Kotlin에서 모든 클래스는 public인 동시에 final이므로, 상속 받기 위해서는 `open` 키워드를 사용해야한다.
@@ -277,3 +281,33 @@ class TestMammal {
     }
 }
 ```
+
+### 다형성
+- 상속과 함께 OOP의 가장 중요한 특징 중 하나이다.
+- 여러 가지 형태를 가질 수 있는 능력을 의미한다.
+- **부모 클래스** 타입의 참조변수로 **자식 클래스**의 인스턴스를 참조할 수 있다
+    ```kotlin
+    class TestMammal {
+        val newHuman: Mammal = Human("philip")
+    }
+    ```
+    하지만 위의 경우, `newHuman`객체는 자식 클래스이 인스턴스를 참조하고 있지만 자식 클래스에만 선언된 멤버 변수나 함수에는 접근할 수 없다.
+    반대로 자식 클래스 타입의 참조변수로 부모 클래스의 인스턴스를 참조할 수는 없다.
+#### casting
+- 참조변수의 형변환을 의미한다.
+- `Up-casting`   : 자식 클래스 타입 → 부모 클래스 타입
+- `Down-casting` : 부모 클래스 타입 → 자식 클래스 타입
+    ```kotlin
+    class TestMammal {
+        lateinit var newMammal: Mammal
+        var newHuman: Human = Human("philip")
+        lateinit var newHumanTow: Human
+        fun main() {
+            newMammal = newHuman // Up-casting: 형변환 생락 가능
+            newHumanTow = newMammal as Human // Down-casting: 형변환 생략 불가
+        }
+    }
+    ```
+- 캐스팅은 기본적으로 데이터형을 변환시켜주는 과정이다. 더군다나 단순한 자료형 변수를 변환하는게 아니라, 여러가지 정보를 담고있는 복잡한 class를 변환하기 때문에 연산 이슈가 발생할 수 밖에 없다. 그렇기 때문에 캐스팅이 필요한 부분에 [제너릭](https://readystory.tistory.com/201)을 사용해서 데이터 형을 제한해주면, 비용낭비를 최소화 할 수 있다.
+
+### 추상화
