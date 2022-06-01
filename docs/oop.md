@@ -223,4 +223,57 @@ class ChildTestError {
 #### private
 같은 `class` 또는 같은 `.kt` 파일 안에서만 접근 가능하다.
 
-###
+
+
+### 상속
+- 자식 클래스는 부모 클래스의 properties를 상속 받을 수 있고, 추가적으로 다른 properties를 가질 수 있다.
+- 키워드로는 `open`, `super`, `override`, `private`이 있다.
+#### open
+- 기본적으로 Kotlin에서 모든 클래스는 public인 동시에 final이므로, 상속 받기 위해서는 `open` 키워드를 사용해야한다.
+#### super
+- 상위 클래스의 메서드, 프로퍼티, 생성자를 사용하는 키워드이다.
+- 비슷한 개념으로 `this`가 있는데, 현재 클래스의 메서드, 프로퍼티, 생성자를 사용하는 키워드이다.
+#### override
+- 부모 클래스의 메소드를 재정의 하는 것이다.
+- 메소드의 이름, parameter, 타입이 모두 동일해야한다.
+- `open` 키워드가 붙은 메소드만 override가 가능하다.
+#### private
+- 선언된 클래스 안에서만 접근할 수 있는 멤버를 만들 때 사용된다
+```kotlin
+open class Mammal {
+    open var legs: Int = 0
+    open var eyes: Int = 0
+    private var name: String = "Mammal" // 클래스 안에서만 접근 가능
+
+    open fun breathing() {
+        println("$name is breathing") // name 변수에 접근 가능
+    }
+
+    open fun eating() {
+        println("$name is eating") // name 변수에 접근 가능
+    }
+}
+
+class Human(var name: String): Mammal() {
+    var iq: Int = 0
+    // override 키워드를 통해 부모 클래스의 변수값을 바꾼다
+    override var eyes: Int = 2 
+    override var legs: Int = 2
+    // override 키워드를 통해 부모 클래스의 함수를 바꾼다
+    override fun breathing() {
+        super.breathing() // super 키워드를 통해 부모 클래스의 breathing 메서드를 호출한다
+        println("Human $name is breathing")
+    }
+}
+
+class TestMammal {
+    val newMammal: Mammal = Mammal()
+    val newHuman: Human = Human("philip")
+    fun main() {
+        println(newMammal.name) // error: Cannot access 'name': it is private in 'Mammal'
+        newHuman.iq = 100 // public이 기본이므로 접근 가능
+        newHuman.breathing() // 접근 가능
+        newHuman.eating() // Human 클래스 안에는 선언되어 있지 않지만, 부모 클래스에 있으므로 접근 가능
+    }
+}
+```
