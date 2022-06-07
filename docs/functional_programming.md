@@ -7,12 +7,20 @@ date: 2022-06-07
 ![image.png](https://i0.wp.com/www.techdiscuss.net/wp-content/uploads/2020/08/Pure-functions.png?fit=666%2C507&ssl=1)
 
 ## 🧊 함수형 프로그래밍의 정의
-함수형 프로그래밍(Functional Programming)은 코드를 작성하는 스타일 중 하나이다.
-즉, 함수형 프로그래밍으로 설계된 언어가 따로 존재하지만(Clojure, Scala), 우리가 사용하는 모든 언어에 적용할 수 있으며 프로그래밍에 발생할 수 있는 여러 문제들을 해결할 수 있다.
-다시 정리하면, **함수형 프로그래밍**은 공유 상태, 변경 가능한 데이터, 부작용을 피하는 기본 원칙에 따라 소프트웨어를 구성하는 프로그래밍 패러다임이다.
+함수형 프로그래밍(Functional Programming)은 코드를 작성하는 스타일 중 하나이다. 즉, 함수형 프로그래밍으로 설계된 언어가 따로 존재하지만(Clojure, Scala), 우리가 사용하는 모든 언어에 적용할 수 있으며 프로그래밍에 발생할 수 있는 여러 문제들을 해결할 수 있다.
+다시 정리하면, **함수형 프로그래밍**은 함수를 사용해서 데이터 처리의 참조 투명성을 보장하고, 상태와 가변 데이터 생성을 피하는 프로그래밍 패러다임이다. 
 >객체지향은 동작하는 부분을 캡슐화해서 이해할 수 있게 하고, 함수형 프로그래밍은 동작하는 부분을 최소화해서 코드 이해를 돕는다. (마이클 페더스‘레거시 코드 활용 전략’)
 
 ![programming history](https://dinfree.com/assets/blog-img/java-fp-1.png)
+
+## 함수형 프로그래밍의 특징
+### 불변성 immutable
+
+### 참조 투명성 referential transparency
+
+### 일급 함수 first-class-function
+
+### lazy evaluation
 
 ## ⚓️ 명령형 Imperative vs 선언형 Declarative
 명령형 프로그래밍과 선언형 프로그래밍도 프로그래밍 패러다임 중 하나이다. 이 둘은 서로 반대되는 개념이기 때문에 차이점을 분석하면서 공부해보자
@@ -25,8 +33,10 @@ date: 2022-06-07
 ### 명령형 프로그래밍
 절차적 프로그래밍이라고도 한다. 얻으려는 것에 대해 어떤 방법으로 접근할 것인지, 그 절차적인 방법을 작성하는 방법이다. 즉, 알고리즘을 명시하지만 목표는 명시하지 않는다. 우리가 배열 알고리즘 문제를 풀 때 반복문으로 각 인덱스에 접근하여 상태를 변경하던 것이 이 방식에 해당한다.
 ```kotlin
-    fun add(items: List<Int>){
-        var result: Int = 0
-        
-    }
+fun add(items: List<Int>) : Int {
+    var result: Int = 0
+    for (i in items)
+        result += i
+    return result
+}
 ```
