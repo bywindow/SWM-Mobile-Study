@@ -17,4 +17,35 @@ Android에서 이런 비동기 처리를 해주기 위해 `RxJava`, `RxKotlin`, 
 # Coroutine
 > 💡 코루틴(Coroutine)은 구글에서 공식적으로 `AsyncTask`를 deprecated 선언한 후 대체 기술로 사용할 것을 추천하고 있다.
 
-코루틴은 비동기적으로 실행되는 코드를 간소화하기 위해 Android에서 사용할 수 있는 동시 실행 설계 패턴이다.
+코루틴은 비동기적으로 실행되는 코드를 간소화하기 위해 Android에서 사용할 수 있는 동시 실행 설계 패턴이다. **코루틴은 Kotlin만의 기능이 아니다.** 이미 많은 언어들(C#, Python, Go, JavaScript 등)에서 지원하고 있던 개념이다.
+Wikipedia에서는 코루틴을 다음과 같이 정의하고 있다.
+> 코루틴은 실행과 재개를 허용함으로써 **비선점형 멀티태스킹**을 위한 서브루틴을 일반화한 컴퓨터 프로그램의 구성 요소이다.
+
+즉, 코루틴은 싱글 쓰레드로 동시성을 제공하고 선점형 멀티테스킹 방식인 쓰레드보다 비용이 적은 멀티테스킹 방식이다.
+
+---
+## Coroutine의 기능
+### 경량
+코루틴은 `Suspend`를 지원하는데, 여러개의 코루틴은 실행한다고 했을 때 코루틴1을 실행하던 중에 Context Switching으로 쓰레드를 바꾸며 코루틴2를 실행하는 것이 아니라 기존 쓰레드 위에서 코루틴1을 정지시키고 코루틴2를 실행한다. 이렇게 하면 단일 쓰레드에서 많은 작업을 수행할 수 있고 메모리 비용 측면에서 이득이다.
+
+### 메모리 누수 감소
+코루틴은 `structured concurrency`이론을 따르는데, 새로운 코루틴은 코루틴의 수명을 제한하는 특정 `CoroutineScope`에서만 실행할 수 있다.
+
+### 작업 취소 지원
+sunflower 코드를 보면
+```kotlin
+private fun search(query: String) {
+    // Make sure we cancel the previous job before creating a new one
+    searchJob?.cancel()
+    searchJob = lifecycleScope.launch {
+        viewModel.searchPictures(query).collectLatest {
+            adapter.submitData(it)
+        }
+    }
+}
+```
+다음과 같이, 코루틴에서 제공하는 클래스형의 객체인 `searchJob`을 `launch`하기 전에 `cancel` 작업을 수행한다. 코루틴에서는 이런 함수를 기본으로 제공해주고 있다.
+
+### Jetpack 통합
+많은 Jetpack 라이브러리에 코루틴은 지원하는 확장프로그램을 포함하고 있다.
+특히, `Lifecycle KTX`, `viewModel KTX`, `workManager KTX` 에서 CoroutineScope를 지원해준다.
