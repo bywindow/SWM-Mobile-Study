@@ -49,3 +49,39 @@ private fun search(query: String) {
 ### Jetpack 통합
 많은 Jetpack 라이브러리에 코루틴은 지원하는 확장프로그램을 포함하고 있다.
 특히, `Lifecycle KTX`, `viewModel KTX`, `workManager KTX` 에서 CoroutineScope를 지원해준다.
+
+---
+## Coroutine 사용
+### coroutine scope
+모든 코루틴은 이 `scope` 안에서 실행되어야 한다. 그래야 액티비티나 프래그먼트의 생명주기에 따라 소멸될 때 관련 코루틴을 한번에 취소할 수 있고, 이것은 메모리 누수를 방지한다. scope는 내장된 범위를 사용하거나 필요에 따라 커스텀도 가능하다.
+기본적으로 내장된 scope는 아래의 4가지이다.
+- GlobalScope : 앱의 생명주기와 함께 동작해서 실행 도중에 별로도 생명주기를 관리해 줄 필요가 없다. 시작부터 종료까지 장기간 실행되는 코루틴 작업에 적합하다.
+- CoroutineScope : 서버로부터 파일이나 이미지를 받는 등 필요에 따라 열거나 닫아주는 작업에 적합하다.
+- ViewModelScope : Jetpack 아키텍처의 viewModel 컴포넌트를 사용시 ViewModel 인스턴스에서 사용하기 위해 제공되는 scope이다. viewModelScope로 실행되는 코루틴은 ViewModel 인스턴스가 소멸될 때 자동으로 취소된다.
+- LifecycleScope : LifecycleScope는 각 Lifecycle 객체에서 정의되고, 이 범위에서 정의된 코루틴은 Lifecycle이 끝날 때 취소된다.
+
+### 사용예시
+그럼 이 코루틴을 어떻게 사용하는지 예시코드를 살펴보자.
+```kotlin
+fun addPlantToGarden() {
+    viewModelScope.launch {
+        gardenPlantingRepository.createGardenPlanting(plantId)
+        _showSnackbar.value = true
+    }
+}
+```
+sunflower 코드 중 일부이며, ViewModel() 클래스를 overload하는 `PlantDetailViewModel` 클래스 안에 정의된 멤버함수이다. viewModelScope를 launch 주기함수를 통해 사용하고 있고, 다른 스코프와는 다르게 별도로 cancel()은 호출하지 않고 사용한다.
+
+다른 예시도 보자.
+```kotlin
+private fun search(query: String) {
+    // Make sure we cancel the previous job before creating a new one
+    searchJob?.cancel()
+    searchJob = lifecycleScope.launch {
+        viewModel.searchPictures(query).collectLatest {
+            adapter.submitData(it)
+        }
+    }
+}
+```
+코루틴에서 실행하는 하나의 프로세스를 `Job`이라고 하고, `searchJob`은 Job의 인스턴스이다. 이전에 실행중이던 Job이 있다면 취소해주고, 새로운 Job을 시작하는 코드이다.
